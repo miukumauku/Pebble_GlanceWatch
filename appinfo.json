@@ -4,20 +4,20 @@
         ""
     ],
     "companyName": "HDL",
-    "longName": "GranceWatch",
+    "longName": "GlanceWatch",
     "projectType": "native",
     "resources": {
         "media": []
     },
     "sdkVersion": "3",
-    "shortName": "GranceWatch",
+    "shortName": "GlanceWatch",
     "targetPlatforms": [
         "aplite",
         "basalt",
         "chalk"
     ],
     "uuid": "6e9040e5-5987-428f-934b-89cae123aee9",
-    "versionLabel": "1.0",
+    "versionLabel": "0.01",
     "watchapp": {
         "watchface": false
     }

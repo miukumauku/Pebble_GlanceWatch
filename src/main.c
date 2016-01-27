@@ -5,6 +5,17 @@ TextLayer *s_hour_text_layer;
 TextLayer *s_min_text_layer;
 TextLayer *s_bt_text_layer;
 
+static void update_bt(BatteryChargeState charge_state) {
+  static char s_battery_buffer[4];
+  char charging_c = charge_state.is_charging ? '.' : '\0';
+  snprintf(s_battery_buffer, sizeof(s_battery_buffer), "%d%c", charge_state.charge_percent, charging_c);
+  text_layer_set_text(s_bt_text_layer, s_battery_buffer);
+}
+
+static void battery_handler(BatteryChargeState charge_state) {
+  update_bt(charge_state);
+}
+
 static void update_time() {
   // Get a tm structure
   time_t temp = time(NULL);
@@ -53,7 +64,12 @@ static void handle_init(void) {
   // Register with TickTimerService
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
   
+  // Register with BatteryStateService
+  battery_state_service_subscribe(battery_handler);
   update_time();
+  
+  BatteryChargeState charge_state = battery_state_service_peek();
+  update_bt(charge_state);
 }
 
 static void handle_deinit(void) {
@@ -61,6 +77,8 @@ static void handle_deinit(void) {
   text_layer_destroy(s_hour_text_layer);
   text_layer_destroy(s_min_text_layer);
   window_destroy(s_window);
+  tick_timer_service_unsubscribe();
+  battery_state_service_unsubscribe();
 }
 
 int main(void) {
